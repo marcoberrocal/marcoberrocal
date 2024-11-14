@@ -1,0 +1,135 @@
+openapi: 3.1.0
+info:
+  title: Karelia API Programming - OpenAPI 3.0
+  description: |-
+    This is a sample OpenAPI OAD.
+    
+    Some useful links:
+    - [Learn OpenAPI](https://learn.openapis.org)
+    - [OpenAPI Specification](https://learn.openapis.org/)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.1.1
+
+security:
+  
+  - ApiKeyAuth: []
+
+servers:
+  - url: http://localhost:3000
+  
+tags:
+  - name: Sample dataset
+    description: Everything you need to know about APIs
+    externalDocs:
+      description: Find out more
+      url: https://m.karelia.fi
+
+paths:
+  /data:
+    get:
+      tags:
+        - Sample dataset
+      summary: Returns a dataset
+      description: Returns a dataset with something more blaah...
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Data'
+        '415':
+          description: Unsupported media type
+
+    post:
+      tags:
+        - Sample dataset
+      summary: Create a new dataset entry
+      description: Creates a new entry in the dataset
+      operationId: createData
+      requestBody:
+        description: Data object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+               $ref: '#/components/schemas/Data'
+      responses:
+        '201':
+          description: Resource created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Data'
+        '400':
+          description: Invalid input
+
+    put:
+      tags:
+        - Sample dataset
+      summary: Update an existing dataset entry
+      description: Updates an existing dataset entry based on the provided ID
+      operationId: updateData
+      parameters:
+        - in: query
+          name: id
+          required: true
+          description: ID of the Data to be updated
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Updated data object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Data'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Data'
+        '400':
+          description: Invalid input
+        '404':
+          description: Data not found
+
+components:
+  schemas:
+    Data:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          examples:
+            - 1
+        forename:
+          type: string
+          examples:
+            - MARCO
+        surname:
+          type: string
+          examples: [ BERROCAL ]
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+    ApiKeyAuth: 
+      type: apiKey
+      in: header 
+      name: X-API-KEY 
